@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.1.2/css/bulma.min.css">
+  <link rel="stylesheet" href="app.css">
+  <title>TODO</title>
+</head>
+
+<body>
+  <div class="app column is-10 is-offset-1">
+    <p class="control is-grouped">
+      <form v-cloak class="container">
+        <input class="input" type="search" placeholder="Search" v-model="searchText">
+        <ul>
+          <div v-for="t in todos | orderBy 'index' |filterBy searchText " class="row box" draggable="true" @dragstart="dragstart(t, $event)" @dragend="dragend" @dragenter="dragenter(t)">
+            <!--<span style="opacity:0.4" >{{t.summary}}{{t.edit}}{{t.isDone}}{{t.index}}</span>-->
+            <input v-if="!t.edit" class="checkbox" type="checkbox" v-model="t.isDone" @click="changeDone">
+            <span v-if="!t.edit" v-text="t.summary" @click="t.edit = true"></span>
+            <div v-if="t.edit" class="control is-grouped">
+              <input type="text" class="input" v-model="t.summary" v-auto-focus>
+              <input type="button" class="button" @click="deleteTodo(t.index)" value="Delete">
+              <input type="button" class="button" @click="cancelTodo(t)" value="OK">
+            </div>
+          </div>
+        </ul>
+        <div class="control is-grouped">
+          <input class="input" type="text" v-model="input" v-on:keypress.enter="addTodo" placeholder="Input Todo" value=""> {{lefts}}
+          <input type="button" class="button" v-bind:class="{'is-primary':input}" v-on:click="addTodo" value="Add Todo">
+          <input type="button" class="button" v-on:click="deleteDoneTodo" value="clear Done">
+        </div>
+      </form>
+    </p>
+  </div>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.10/vue.js'></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
